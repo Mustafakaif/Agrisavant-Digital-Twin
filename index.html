@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AGRISAVANT Digital Twin - Tomato Sahoo</title>
+<link rel="stylesheet" href="css/style.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js"
+  }
+}
+</script>
+</head>
+<body>
+<div class="app">
+
+  <div class="hero">
+    <div class="hero-left">
+      <img class="hero-logo" src="assets/logo.jpeg" alt="AGRISAVANT Logo">
+      <div>
+        <h1>AGRISAVANT Digital Twin</h1>
+        <p>Variety: Tomato Sahoo &bull; Environment-Responsive Growth Model (DAS 1 to 120)</p>
+      </div>
+    </div>
+    <div class="live">REAL-TIME MODEL</div>
+  </div>
+
+  <div class="layout">
+
+    <!-- LEFT: growing conditions -->
+    <div>
+      <div class="panel">
+        <div class="panel-title">Growing conditions</div>
+        <div class="panel-sub">Move any input to recalculate growth and risk.</div>
+
+        <div class="field">
+          <label>Relative humidity (%) <span class="val" id="humidityVal">65</span></label>
+          <input type="range" id="humidity" min="0" max="100" step="1" value="65">
+        </div>
+
+        <div class="field">
+          <label>Growing Degree Days input <span class="val" id="gddVal">20</span></label>
+          <input type="range" id="gdd" min="10" max="30" step="1" value="20">
+          <div class="hint">Prototype daily thermal-growth input.</div>
+        </div>
+
+        <div class="field">
+          <label>Soil humidity (%) <span class="val" id="soilVal">65</span></label>
+          <input type="range" id="soil" min="1" max="100" step="1" value="65">
+        </div>
+
+        <div class="field">
+          <label>Sun hours <span class="val" id="sunVal">8</span></label>
+          <input type="range" id="sun" min="0" max="12" step="1" value="8">
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:12px">
+        <div class="panel-title">Model response</div>
+        <div class="panel-sub">Temporary response layer for the visual prototype.</div>
+        <div class="metric-grid">
+          <div class="metric">
+            <div class="label">Environment score</div>
+            <div class="value"><span id="envScoreVal">0</span><span class="unit">/100</span></div>
+          </div>
+          <div class="metric">
+            <div class="label">Growth factor</div>
+            <div class="value"><span id="growthFactorVal">0</span><span class="unit">&times;</span></div>
+          </div>
+        </div>
+        <div class="note">The equations are isolated in <b>js/growth-model.js</b>. Replace them with validated formulas later; the interface and plant renderer will continue to work.</div>
+      </div>
+    </div>
+
+    <!-- CENTRE: plant + DAS -->
+    <div>
+      <div class="plant-shell">
+        <div class="plant-viewport">
+          <canvas id="plantCanvas"></canvas>
+          <div class="plant-tag">
+            <span id="stageTag">Seedling</span>
+            <span id="healthTag" class="health-tag">Health 100%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage-strip">
+        <div><strong id="stageStripName">Seedling</strong></div>
+        <div class="das">Day <span id="stageStripDas">55</span> of 120</div>
+      </div>
+
+      <div class="das-card">
+        <div class="caption">DAS &mdash; Days after sowing</div>
+        <input type="range" id="das" min="1" max="120" step="1" value="55">
+        <div class="ticks">
+          <span>1</span><span>20</span><span>40</span><span>60</span><span>80</span><span>100</span><span>120</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: summary -->
+    <div class="panel">
+      <div class="summary-head">
+        <h3>Summary of plant</h3>
+        <div class="score-pill">DAS <span id="dasPill">55</span></div>
+      </div>
+      <div class="metric-grid">
+        <div class="metric"><div class="label">Plant height</div><div class="value"><span id="heightVal">0</span><span class="unit">cm</span></div></div>
+        <div class="metric"><div class="label">Plant biomass</div><div class="value"><span id="biomassVal">0</span><span class="unit">g</span></div></div>
+        <div class="metric"><div class="label">Flowers</div><div class="value"><span id="flowersVal">0</span></div></div>
+        <div class="metric"><div class="label">Fruits</div><div class="value"><span id="fruitsVal">0</span></div></div>
+        <div class="metric"><div class="label">Fruit size</div><div class="value"><span id="fruitSizeVal">0</span><span class="unit">cm</span></div></div>
+        <div class="metric"><div class="label">Current stage</div><div class="value" style="font-size:12px;line-height:1.2;padding-top:4px" id="currentStageVal">Seedling</div></div>
+      </div>
+
+      <div id="qualityBadge"></div>
+
+      <div class="gauges" id="gauges"></div>
+
+      <div class="health" id="healthPanel" style="--health:100%">
+        <div class="health-top"><span>PLANT HEALTH</span><strong id="healthPct">100%</strong></div>
+        <div class="health-track"><div class="health-fill"></div></div>
+      </div>
+
+      <div class="note">Prototype values are not agronomic recommendations. Calibrate against variety, location, field observations and Aetos measurements before operational use.</div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

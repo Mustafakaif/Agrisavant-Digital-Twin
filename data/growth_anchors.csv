@@ -1,0 +1,9 @@
+das,stage,height_cm,above_ground_dry_biomass_g,current_open_flowers,fruits_on_plant,lead_fruit_diameter_mm
+10,Transplant establishment,12,1.2,0,0,0
+20,Vegetative growth,22,4,0,0,0
+30,Vegetative growth,35,9,0,0,0
+40,Canopy expansion / flower initiation,48,16,2,0,0
+50,Flowering / first fruit set,60,25,7,1,8
+60,Fruit set,69,33,10,4,18
+70,Fruit enlargement,77,40,12,7,30
+80,Fruit development,82,45,10,9,48

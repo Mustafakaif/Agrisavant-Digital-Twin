@@ -1,0 +1,3 @@
+@echo off
+echo Starting AGRISAVANT Digital Twin dashboard on http://localhost:8743 ...
+node "%~dp0serve.js"
