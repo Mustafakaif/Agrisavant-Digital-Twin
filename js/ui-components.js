@@ -7,7 +7,9 @@ export function riskLevel(value) {
 
 export function gaugeSvg(value, title) {
   value = Math.max(0, Math.min(100, Math.round(value)));
-  const angle = -90 + (180 * value) / 100;
+  // 0 -> 180deg (left/LOW), 50 -> 270deg (top/MEDIUM), 100 -> 360deg (right/HIGH) —
+  // must match the LOW/MED/HIGH arc segments drawn below, not an arbitrary offset.
+  const angle = 180 + (180 * value) / 100;
   const rad = (angle * Math.PI) / 180;
   const cx = 120, cy = 115, length = 72;
   const x2 = cx + length * Math.cos(rad);
@@ -26,7 +28,7 @@ export function gaugeSvg(value, title) {
         <line x1="${cx}" y1="${cy}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#17221B" stroke-width="7" stroke-linecap="round"/>
         <circle cx="${cx}" cy="${cy}" r="13" fill="#17221B"/><circle cx="${cx}" cy="${cy}" r="5" fill="#5E7064"/>
       </svg>
-      <div class="gauge-reading"><strong>${value}%</strong><span>${level}</span></div>
+      <div class="gauge-reading"><span class="gauge-level">${level}</span></div>
     </div>`;
 }
 

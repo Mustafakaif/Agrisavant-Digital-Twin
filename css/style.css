@@ -95,7 +95,7 @@ html, body {
 .field .hint { font-size: 10px; color: #92A092; margin-top: 2px; }
 
 .plant-shell {
-  background: #0f1119;
+  background: #ffffff;
   border: 1px solid var(--line);
   border-radius: 25px;
   padding: 10px;
@@ -106,7 +106,7 @@ html, body {
   position: relative;
   border-radius: 16px;
   overflow: hidden;
-  background: #0f1119;
+  background: #ffffff;
   aspect-ratio: 3 / 4;
   max-height: 640px;
 }
@@ -183,9 +183,8 @@ html, body {
 .gauge-title { text-align: center; font-size: 11px; font-weight: 800; color: #2B4634; }
 .gauge-svg { width: 100%; height: auto; display: block; }
 .gauge-zone { font: 700 8px Inter, Arial; fill: #304235; }
-.gauge-reading { display: flex; justify-content: center; gap: 7px; align-items: baseline; margin-top: -10px; }
-.gauge-reading strong { font-size: 17px; }
-.gauge-reading span { font-size: 9px; font-weight: 800; color: #748177; letter-spacing: .8px; }
+.gauge-reading { display: flex; justify-content: center; align-items: baseline; margin-top: -10px; }
+.gauge-reading .gauge-level { font-size: 14px; font-weight: 800; color: #2B4634; letter-spacing: .8px; }
 
 .health {
   margin-top: 10px; border-radius: 16px; background: #193A28; color: white; padding: 13px 14px;

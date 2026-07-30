@@ -104,18 +104,47 @@ function median(values) {
   return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 }
 
+function smoothstep01(x, a, b) {
+  const t = clamp((x - a) / (b - a), 0, 1);
+  return t * t * (3 - 2 * t);
+}
+
+// Pest/disease pressure follows the crop's growth stage (per the excel-sourced DAS/stage
+// timeline): DAS 1-60 (seedling -> vegetative growth) is always LOW risk; DAS 60-90
+// (flowering / fruit set, canopy closing in) is a MEDIUM baseline that conditions can push
+// into HIGH; DAS 90-120 (ripening -> harvest) is always a HIGH baseline, with conditions only
+// setting how severe. Within each phase the four inputs (humidity, GDD, soil, sun) drive how
+// unfavourable conditions are (0 = ideal, 1 = worst), which moves the needle within that phase.
 function riskScores(das, env, envScoreValue) {
-  const canopy = clamp((das - 28) / 52, 0, 1);
   const wetAir = clamp((env.humidity - 62) / 38, 0, 1);
   const wetSoil = clamp((env.soilHumidity - 72) / 28, 0, 1);
   const drySoil = clamp((38 - env.soilHumidity) / 37, 0, 1);
   const lowSun = clamp((6 - env.sunHours) / 6, 0, 1);
   const heatStress = clamp(Math.abs(env.gdd - 20) / 10, 0, 1);
 
-  const pest = 8 + 23 * canopy + 23 * wetAir + 17 * drySoil + 10 * heatStress;
-  const disease = 6 + 28 * canopy * wetAir + 25 * wetSoil + 18 * lowSun + 12 * heatStress;
-  const pestI = Math.round(clamp(pest, 2, 96));
-  const diseaseI = Math.round(clamp(disease, 2, 96));
+  const pestStress = clamp(0.35 * wetAir + 0.25 * drySoil + 0.20 * heatStress + 0.20 * lowSun, 0, 1);
+  const diseaseStress = clamp(0.35 * wetAir + 0.30 * wetSoil + 0.20 * lowSun + 0.15 * heatStress, 0, 1);
+
+  let pest, disease;
+  if (das <= 60) {
+    const t = smoothstep01(das, 1, 60);
+    const base = 3 + 27 * t; // gradual rise across the LOW zone (0-33) as DAS advances
+    pest = clamp(base + 8 * pestStress, 2, 33);
+    disease = clamp(base + 8 * diseaseStress, 2, 33);
+  } else if (das <= 90) {
+    const t = smoothstep01(das, 60, 90);
+    const floor = 34 + 8 * t; // MEDIUM floor (34-42), conditions can carry it into HIGH
+    pest = floor + pestStress * (99 - floor);
+    disease = floor + diseaseStress * (99 - floor);
+  } else {
+    const t = smoothstep01(das, 90, 120);
+    const floor = 67 + 8 * t; // HIGH floor (67-75); conditions only set severity above it
+    pest = floor + pestStress * (99 - floor);
+    disease = floor + diseaseStress * (99 - floor);
+  }
+
+  const pestI = Math.round(clamp(pest, 2, 99));
+  const diseaseI = Math.round(clamp(disease, 2, 99));
 
   const stress = (1.0 - envScoreValue) * 45;
   const health = 100 - 0.28 * pestI - 0.38 * diseaseI - stress;

@@ -247,6 +247,7 @@ export async function createPlant(canvas, opts = {}) {
   });
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+  renderer.setClearColor(0xffffff, 1);
   renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -256,17 +257,16 @@ export async function createPlant(canvas, opts = {}) {
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(34, 1, 0.05, 40);
-  camera.position.set(0.62, 0.7, 1.35);
+  camera.position.set(0, 0.7, 1.5);
 
   const controls = new OrbitControls(camera, canvas);
   controls.enableDamping = true; controls.dampingFactor = 0.08;
   controls.enablePan = false;
   controls.minDistance = 0.6; controls.maxDistance = 4.2;
   controls.maxPolarAngle = Math.PI * 0.52;
-  controls.autoRotate = true; controls.autoRotateSpeed = 0.45;
-  let idleAt = 0, autoFrame = true;
-  controls.addEventListener('start', () => { controls.autoRotate = false; autoFrame = false; idleAt = performance.now(); });
-  controls.addEventListener('end', () => { idleAt = performance.now(); });
+  controls.autoRotate = false; controls.autoRotateSpeed = 0.45;
+  let autoFrame = true;
+  controls.addEventListener('start', () => { autoFrame = false; });
 
   // studio void lighting
   const key = new THREE.SpotLight(0xfff3e2, 42, 0, 0.62, 0.75, 1.4);
@@ -498,7 +498,6 @@ export async function createPlant(canvas, opts = {}) {
       dir.multiplyScalar(lerp(r, want, 0.05) / r);
       camera.position.copy(controls.target).add(dir);
     }
-    if (!controls.autoRotate && now - idleAt > 4000) controls.autoRotate = true;
     controls.update();
     renderer.render(scene, camera);
     requestAnimationFrame(frame);
@@ -537,8 +536,8 @@ export async function createPlant(canvas, opts = {}) {
     },
     setGhost(on) { ghost.group.visible = !!on; },
     resetView() {
-      camera.position.set(0.62, 0.7, 1.35);
-      controls.autoRotate = true;
+      camera.position.set(0, 0.7, 1.5);
+      controls.autoRotate = false;
       autoFrame = true;
     },
     dispose() { running = false; ro.disconnect(); controls.dispose(); renderer.dispose(); }
