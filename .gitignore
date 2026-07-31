@@ -6,6 +6,7 @@ Thumbs.db
 .vscode/
 .idea/
 
+
 # Node (only relevant if any tooling gets added later)
 node_modules/
 npm-debug.log*

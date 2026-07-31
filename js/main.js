@@ -38,7 +38,7 @@ const els = {
   healthPct: document.getElementById('healthPct'),
 };
 
-const state = { das: 55, humidity: 65, gdd: 20, soil: 65, sun: 8 };
+const state = { das: 55, humidity: 65, gdd: 14, soil: 76, sun: 8 };
 
 function healthTone(healthPct, dead) {
   if (dead || healthPct < 25) return RED;

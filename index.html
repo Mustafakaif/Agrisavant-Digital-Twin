@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AGRISAVANT Digital Twin - Tomato Sahoo</title>
+<link rel="icon" type="image/jpeg" href="assets/logo.jpeg">
+<link rel="apple-touch-icon" href="assets/logo.jpeg">
 <link rel="stylesheet" href="css/style.css">
 <script type="importmap">
 {
@@ -42,14 +44,14 @@
         </div>
 
         <div class="field">
-          <label>Growing Degree Days input <span class="val" id="gddVal">20</span></label>
-          <input type="range" id="gdd" min="10" max="30" step="1" value="20">
-          <div class="hint">Prototype daily thermal-growth input.</div>
+          <label>Growing Degree Days input <span class="val" id="gddVal">14</span></label>
+          <input type="range" id="gdd" min="0" max="30" step="1" value="14">
+          <div class="hint">Daily thermal units (target ~14; 0 = too cold for any development).</div>
         </div>
 
         <div class="field">
-          <label>Soil humidity (%) <span class="val" id="soilVal">65</span></label>
-          <input type="range" id="soil" min="1" max="100" step="1" value="65">
+          <label>Soil humidity (%) <span class="val" id="soilVal">76</span></label>
+          <input type="range" id="soil" min="0" max="100" step="1" value="76">
         </div>
 
         <div class="field">
@@ -71,7 +73,6 @@
             <div class="value"><span id="growthFactorVal">0</span><span class="unit">&times;</span></div>
           </div>
         </div>
-        <div class="note">The equations are isolated in <b>js/growth-model.js</b>. Replace them with validated formulas later; the interface and plant renderer will continue to work.</div>
       </div>
     </div>
 
@@ -124,8 +125,6 @@
         <div class="health-top"><span>PLANT HEALTH</span><strong id="healthPct">100%</strong></div>
         <div class="health-track"><div class="health-fill"></div></div>
       </div>
-
-      <div class="note">Prototype values are not agronomic recommendations. Calibrate against variety, location, field observations and Aetos measurements before operational use.</div>
     </div>
 
   </div>
